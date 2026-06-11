@@ -1,0 +1,36 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+
+# Tooling / agent scratch
+.claude/
+.playwright-mcp/
+.od-skills/
+.agents/
+.firecrawl/
+skills-lock.json
+
+# Python
+__pycache__/
+.cadvenv/
+*.pyc
+venv/
+.venv/
+
+# Blender backups
+*.blend1
+*.blend2
+
+# Regenerable mesh exports (rebuilt from STEP/F3D sources)
+*.obj
+*.mtl
+
+# Per-part GLB exports >100 MB (GitHub hard limit; regenerable from inverted_pendulum.blend)
+Control Theory Project/Blender/Website Project/assets/*.glb
+!Control Theory Project/Blender/Website Project/assets/cutting_mat.glb
+
+# Node
+node_modules/
+
+# Downloaded addon installers
+*blenderkit*.zip

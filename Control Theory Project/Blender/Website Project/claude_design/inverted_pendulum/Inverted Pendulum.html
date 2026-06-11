@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Inverted Pendulum — Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700;900&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --lab:        #0E0E0C;
+    --lab-2:      #16160F;
+    --bone:       #F5F3EE;
+    --bone-2:     #EAE6DE;
+    --ink-on-lab: #F4F1E8;
+    --ink-on-bone:#0A0A08;
+    --mut-d:  rgba(244,241,232,.55);
+    --fnt-d:  rgba(244,241,232,.30);
+    --mut-l:  rgba(10,10,8,.55);
+    --fnt-l:  rgba(10,10,8,.30);
+    --hair-d: rgba(244,241,232,.14);
+    --hair-l: rgba(10,10,8,.14);
+    --accent: #D4FF3A;
+    --accent-dim: #B7DD2C;
+    --warn:   #FF6A3D;
+    --display:'Geist', system-ui, sans-serif;
+    --serif:  'Instrument Serif', 'Times New Roman', serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--lab);
+    color: var(--ink-on-lab);
+    font-family: var(--display);
+    overflow: hidden;
+    height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  #root { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+
+  /* Cutting-mat grid bg */
+  .mat-d {
+    background-color: var(--lab);
+    background-image:
+      linear-gradient(rgba(244,241,232,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244,241,232,.04) 1px, transparent 1px),
+      linear-gradient(rgba(244,241,232,.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244,241,232,.10) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+  }
+  .mat-l {
+    background-color: var(--bone);
+    background-image:
+      linear-gradient(rgba(10,10,8,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,10,8,.06) 1px, transparent 1px),
+      linear-gradient(rgba(10,10,8,.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,10,8,.12) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+  }
+
+  /* Bracket chrome — fixed corner pieces */
+  .brackets { position: absolute; inset: 0; pointer-events: none; }
+  .brackets::before, .brackets::after,
+  .brackets > .br-tr, .brackets > .br-br {
+    content: ''; position: absolute; width: 18px; height: 18px;
+    border-color: currentColor; border-style: solid; border-width: 0;
+  }
+  .brackets::before { top: 14px; left: 14px; border-top-width: 1px; border-left-width: 1px; }
+  .brackets::after  { bottom: 14px; left: 14px; border-bottom-width: 1px; border-left-width: 1px; }
+  .brackets .br-tr  { top: 14px; right: 14px; border-top-width: 1px; border-right-width: 1px; }
+  .brackets .br-br  { bottom: 14px; right: 14px; border-bottom-width: 1px; border-right-width: 1px; }
+
+  /* Mono caps label */
+  .mono-cap { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+  .mono-cap-sm { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+
+  /* Mode pill */
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: var(--ink-on-lab);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, opacity .18s ease;
+    user-select: none;
+  }
+  .pill .pn { font-size: 9px; opacity: .55; }
+  .pill:hover { background: rgba(244,241,232,.05); }
+  .pill.active { background: var(--ink-on-lab); color: var(--lab); }
+  .pill.active .pn { opacity: .6; color: var(--lab); }
+  .pill[data-light="true"] { color: var(--ink-on-bone); }
+  .pill[data-light="true"]:hover { background: rgba(10,10,8,.05); }
+  .pill[data-light="true"].active { background: var(--ink-on-bone); color: var(--bone); }
+  .pill[data-light="true"].active .pn { color: var(--bone); }
+
+  /* Focus ring */
+  .pill:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--lab), 0 0 0 4px var(--accent); }
+
+  /* Buttons */
+  .btn {
+    padding: 8px 14px;
+    border: 1px solid currentColor;
+    background: transparent;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease;
+  }
+  .btn:hover { background: rgba(244,241,232,.06); }
+  .btn.primary { background: var(--ink-on-lab); color: var(--lab); }
+  .btn.primary:hover { background: var(--accent); color: var(--lab); border-color: var(--accent); }
+  .btn:disabled { opacity: .3; cursor: not-allowed; }
+
+  /* Fade transitions (CSS transition, not @keyframes — survives iframe throttling) */
+  .stage { opacity: 1; transition: opacity .35s cubic-bezier(.2,.7,.3,1); }
+  .stage-enter { opacity: 0; }
+  .slide-up { /* no animation — keep className for backwards compat */ }
+
+  /* Progress bar */
+  .prog-track { height: 2px; background: var(--hair-d); position: relative; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--accent); transition: width .12s linear; }
+
+  /* Tile */
+  .tile { padding: 10px 12px; border: 1px solid var(--hair-d); position: relative; min-width: 0; }
+  .tile-h { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--mut-d); }
+  .tile-v { font-family: var(--display); font-weight: 700; font-size: 16px; margin-top: 4px; letter-spacing: -.005em; }
+  .tile.accent .tile-v { color: var(--accent); }
+  .tile-sub { font-family: var(--mono); font-size: 9px; color: var(--mut-d); margin-top: 4px; }
+
+  /* Studio panel */
+  .panel {
+    position: relative;
+    background: rgba(14,14,12,.86);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hair-d);
+    color: var(--ink-on-lab);
+  }
+  .panel-light {
+    background: rgba(245,243,238,.92);
+    color: var(--ink-on-bone);
+    border-color: var(--hair-l);
+  }
+
+  /* Hairline */
+  .hair-d { height: 1px; background: var(--hair-d); }
+  .hair-l { height: 1px; background: var(--hair-l); }
+
+  /* Slider */
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 14px; background: transparent;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 2px; background: var(--hair-d); border: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 14px; height: 14px; background: var(--accent); border-radius: 0;
+    margin-top: -6px;
+  }
+  input[type=range]::-moz-range-track { height: 2px; background: var(--hair-d); }
+  input[type=range]::-moz-range-thumb { width: 14px; height: 14px; background: var(--accent); border-radius: 0; border: none; }
+
+  /* Cursor */
+  .perturb-cursor { cursor: crosshair; }
+
+  /* Help overlay */
+  .help-key {
+    display:inline-block; padding: 2px 6px; border: 1px solid currentColor;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .08em; margin-right: 4px;
+  }
+
+  /* Italic serif accent */
+  .serif-i { font-family: var(--serif); font-style: italic; }
+</style>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#0E0E0C">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0E0E0C"/>
+    <rect x="540" y="540" width="120" height="40" fill="#F4F1E8"/>
+    <line x1="600" y1="540" x2="600" y2="240" stroke="#F4F1E8" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="600" cy="220" r="28" fill="#D4FF3A"/>
+    <line x1="0" y1="580" x2="1200" y2="580" stroke="rgba(244,241,232,.3)" stroke-width="1"/>
+    <text x="60" y="120" font-family="ui-monospace, monospace" font-size="22" fill="rgba(244,241,232,.55)" letter-spacing=".18em">[ LAB / 04 ]</text>
+    <text x="60" y="170" font-family="system-ui, sans-serif" font-weight="900" font-size="56" fill="#F4F1E8" letter-spacing="-.02em">PENDULUM.</text>
+    <text x="60" y="220" font-family="Times, serif" font-style="italic" font-size="40" fill="#D4FF3A">inverted.</text>
+  </svg>
+</template>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="pp-physics.jsx"></script>
+<script type="text/babel" src="pp-modes.jsx"></script>
+<script type="text/babel" src="pp-app.jsx"></script>
+</body>
+</html>

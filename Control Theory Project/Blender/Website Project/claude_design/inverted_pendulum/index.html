@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Inverted Pendulum — Pass 1 · System & Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700;900&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink-d: #0E0E0C;
+    --ink-d-2: #16160F;
+    --ink-d-3: #1F1E15;
+    --ink-l: #F5F3EE;
+    --ink-l-2: #EAE6DE;
+    --ink-l-3: #DCD7CB;
+    --txt-on-d: #F4F1E8;
+    --txt-on-d-mut: rgba(244,241,232,.55);
+    --txt-on-d-fnt: rgba(244,241,232,.32);
+    --txt-on-l: #0A0A08;
+    --txt-on-l-mut: rgba(10,10,8,.55);
+    --txt-on-l-fnt: rgba(10,10,8,.30);
+    --accent: #D4FF3A;
+    --accent-dim: #B7DD2C;
+    --warn: #FF6A3D;
+    --hair-d: rgba(244,241,232,.14);
+    --hair-l: rgba(10,10,8,.14);
+    --display: 'Geist', system-ui, sans-serif;
+    --serif:   'Instrument Serif', 'Times New Roman', serif;
+    --mono:    'Geist Mono', ui-monospace, monospace;
+  }
+  html, body { margin:0; padding:0; background:#f0eee9; font-family: var(--display); color: var(--txt-on-l); }
+  *, *::before, *::after { box-sizing:border-box; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ds-primitives.jsx"></script>
+<script type="text/babel" src="ds-artboards.jsx"></script>
+<script type="text/babel" src="wf-artboards.jsx"></script>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard, DCPostIt } = window;
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="meta" title="Inverted Pendulum / Pass 1" subtitle="Design system + wireframes — review before prototype build">
+        <DCArtboard id="intro" label="00 · Brief & system map" width={920} height={560}>
+          <window.IntroBoard/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="ds" title="Design system" subtitle="One-pager — palette, type, chrome, components, motion, a11y">
+        <DCArtboard id="ds-palette" label="01 · Palette"        width={760} height={520}><window.PaletteBoard/></DCArtboard>
+        <DCArtboard id="ds-type"    label="02 · Type"           width={760} height={520}><window.TypeBoard/></DCArtboard>
+        <DCArtboard id="ds-chrome"  label="03 · Chrome motif"   width={760} height={520}><window.ChromeBoard/></DCArtboard>
+        <DCArtboard id="ds-pills"   label="04 · Mode pills"     width={760} height={520}><window.PillBoard/></DCArtboard>
+        <DCArtboard id="ds-panel"   label="05 · Panels & tiles" width={760} height={520}><window.PanelBoard/></DCArtboard>
+        <DCArtboard id="ds-loader"  label="06 · Loader spec"    width={760} height={520}><window.LoaderBoard/></DCArtboard>
+        <DCArtboard id="ds-motion"  label="07 · Motion tokens"  width={760} height={520}><window.MotionBoard/></DCArtboard>
+        <DCArtboard id="ds-a11y"   label="08 · A11y notes"     width={760} height={520}><window.A11yBoard/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="wf" title="Wireframes" subtitle="Low-fi — every region labeled. Three modes + three Studio panels + loader + mobile">
+        <DCArtboard id="wf-load"    label="W0 · Loader"           width={1280} height={720}><window.WFLoader/></DCArtboard>
+        <DCArtboard id="wf-kit"     label="W1 · Kit"              width={1280} height={720}><window.WFKit/></DCArtboard>
+        <DCArtboard id="wf-run"     label="W2 · Run"              width={1280} height={720}><window.WFRun/></DCArtboard>
+        <DCArtboard id="wf-st-d"    label="W3 · Studio · Diagram" width={1280} height={720}><window.WFStudioDiagram/></DCArtboard>
+        <DCArtboard id="wf-st-p"    label="W4 · Studio · Plots"   width={1280} height={720}><window.WFStudioPlots/></DCArtboard>
+        <DCArtboard id="wf-st-m"    label="W5 · Studio · Math"    width={1280} height={720}><window.WFStudioMath/></DCArtboard>
+        <DCArtboard id="wf-mobile"  label="W6 · Mobile fallback"  width={420}  height={720}><window.WFMobile/></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Inverted Pendulum — Live 3D Lab</title>
+<meta name="description" content="Interactive 3D inverted pendulum. Real Blender geometry. Real-time RK4 physics. PD swing-up and balance." />
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="PENDULUM. inverted." />
+<meta property="og:description" content="Interactive 3D inverted pendulum lab. Real Blender geometry. CT_Project physics. PD swing-up + balance." />
+<meta property="og:site_name" content="LAB / 04" />
+<!-- og:image is relative; most crawlers resolve it. Swap to the absolute
+     production URL on deploy for full Twitter/Slack compatibility. -->
+<meta property="og:image" content="assets/og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="PENDULUM. inverted." />
+<meta name="twitter:description" content="Interactive 3D inverted pendulum lab. Real Blender geometry. CT_Project physics. PD swing-up + balance." />
+<meta name="twitter:image" content="assets/og.jpg" />
+<meta name="theme-color" content="#EFECE3" />
+<!-- Inline SVG favicon — acid green dot on bone -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23EFECE3'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23D4FF3A'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700;900&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=6" />
+<!-- Preconnect to Draco CDN -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+<link rel="dns-prefetch" href="https://www.gstatic.com" />
+<!-- Importmap MUST precede any modulepreload that names bare specifiers -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<!-- Modulepreload Three.js + addons. After importmap so bare specifiers resolve. -->
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/build/three.module.js" />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js" />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/loaders/DRACOLoader.js" />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js" />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js" />
+<!-- No GLB preload: app.js fetches with a per-minute ?v= cache-bust, so a
+     static preload URL can never match and the 10.6 MB GLB downloads twice. -->
+</head>
+<body class="mat-d">
+
+  <noscript>
+    <div style="position:fixed;inset:0;z-index:99;background:#EFECE3;color:#0A0A08;display:flex;align-items:center;justify-content:center;font:14px/1.6 ui-monospace,monospace;padding:40px;text-align:center;">
+      This lab runs a live RK4 simulation in your browser — JavaScript is required.
+    </div>
+  </noscript>
+
+  <!-- Loader -->
+  <div id="loader" class="loader">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="loader-top mono-cap-sm">[ LAB / 04 ] — BOOT · v0.1</div>
+    <div class="loader-center">
+      <div class="loader-title">
+        <span class="loader-display">PENDULUM.</span>
+        <span class="serif-i loader-serif">inverted.</span>
+      </div>
+      <div class="loader-bar"><div id="loader-bar-fill"></div></div>
+      <div class="mono-cap-sm" id="loader-status">FETCH · GEOMETRY</div>
+    </div>
+    <div class="loader-foot mono-cap-sm">REAL BLENDER GEOMETRY · DRACO COMPRESSED · LIVE RK4 SIM</div>
+  </div>
+
+  <!-- 3D canvas -->
+  <canvas id="stage"></canvas>
+
+  <!-- Hero intro (post-loader, pre-interactive). Progressive reveal. -->
+  <div id="hero" class="hero hidden">
+    <div class="hero-top mono-cap-sm muted">
+      <span class="hero-fade hero-d1">[ LAB / 04 ]</span>
+      <span class="hair"></span>
+      <span class="hero-fade hero-d1">CONTROL THEORY · 2026</span>
+    </div>
+
+    <div class="hero-center">
+      <div class="hero-title">
+        <span class="hero-fade hero-d2 display hero-display">PENDULUM.</span>
+        <span class="hero-fade hero-d3 serif-i hero-serif">inverted.</span>
+      </div>
+      <div class="hero-eq hero-fade hero-d4 serif-i">J θ̈ + b θ̇ = τ + m g l sin(θ)</div>
+      <div class="hero-sub hero-fade hero-d5 mono-cap-sm muted">
+        balance is a state · real Blender geometry · live RK4 · PD catch + energy-pump swing-up
+      </div>
+      <div class="hero-credit hero-fade hero-d5 mono-cap-sm muted">
+        physics &middot; Patel · Kurle · Golait · Kanwat &mdash; CT_Project 2022
+      </div>
+    </div>
+
+    <div class="hero-foot hero-fade hero-d6">
+      <button id="hero-enter" class="pill">
+        <span class="pn">→</span>
+        <span>[ ENTER LAB ]</span>
+      </button>
+      <span class="mono-cap-sm muted hero-hint">press 1 · 2 · 3 to switch modes</span>
+    </div>
+  </div>
+
+  <!-- Top chrome -->
+  <div class="chrome-tl">
+    <div class="mono-cap-sm tl-meta">
+      <span>[ LAB / 04 ]</span>
+      <span class="hair"></span>
+      <span>2026 · v0.1</span>
+    </div>
+    <div class="tl-title">
+      <span class="display">PENDULUM.</span>
+      <span class="serif-i accent">inverted.</span>
+    </div>
+  </div>
+
+  <div class="chrome-tr">
+    <div class="mono-cap-sm muted">READOUT · LIVE</div>
+    <div class="readout">
+      <div>θ &nbsp;=&nbsp; <span id="r-theta">0.000</span> rad</div>
+      <div>θ̇ &nbsp;=&nbsp; <span id="r-omega">0.00</span> rad/s</div>
+      <div>τ &nbsp;=&nbsp; <span id="r-tau">0.00</span> N·m</div>
+      <div class="muted"><span id="r-fps">60</span> fps · ode/rk4</div>
+    </div>
+  </div>
+
+  <!-- Bottom mode badge -->
+  <div class="chrome-bl">
+    <span class="mono-cap" id="b-num">[ 01 ]</span>
+    <span class="hair"></span>
+    <span class="display b-label" id="b-label">KIT.</span>
+  </div>
+
+  <!-- Bottom help hint -->
+  <div class="chrome-br mono-cap-sm muted" id="b-hint">
+    [ 1 KIT ] &nbsp; [ 2 RUN ] &nbsp; [ 3 STUDIO ] &nbsp; [ R RESET ] &nbsp; [ SPACE PERTURB ]
+  </div>
+
+  <!-- Mode picker -->
+  <div class="pills" id="pills">
+    <button class="pill active" data-mode="kit"><span class="pn">01</span><span>[ KIT ]</span></button>
+    <button class="pill" data-mode="run"><span class="pn">02</span><span>[ RUN ]</span></button>
+    <button class="pill" data-mode="studio"><span class="pn">03</span><span>[ STUDIO ]</span></button>
+  </div>
+
+  <!-- KIT callout -->
+  <div id="kit-callout" class="callout hidden">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="mono-cap-sm muted" id="kit-num">[ 01 ]</div>
+    <div class="callout-title display" id="kit-name">ARDUINO UNO</div>
+    <div class="mono-cap-sm muted" id="kit-sub">CONTROLLER · ATMEGA328P · 16 MHZ</div>
+  </div>
+
+  <!-- Studio sub-pills -->
+  <div id="sub-pills" class="sub-pills hidden">
+    <button class="pill sub active" data-sub="diagram"><span>[ D · DIAGRAM ]</span></button>
+    <button class="pill sub" data-sub="plots"><span>[ P · PLOTS ]</span></button>
+    <button class="pill sub" data-sub="math"><span>[ M · MATH ]</span></button>
+  </div>
+
+  <!-- Studio panel: Diagram -->
+  <div id="panel-diagram" class="panel hidden">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="mono-cap-sm muted">[ D ] · BLOCK DIAGRAM · cascade</div>
+    <div class="diagram">
+      <div class="dblock">r(t)</div><div class="darrow">→</div>
+      <div class="dblock">POSITION<br/>CTRL</div><div class="darrow">→</div>
+      <div class="dblock">CURRENT<br/>CTRL</div><div class="darrow">→</div>
+      <div class="dblock plant">PLANT</div>
+      <div class="dlabel">θ(t)</div>
+    </div>
+    <div class="signals mono-cap-sm muted">
+      <span>r — setpoint (rad)</span><span>i — coil current (A)</span><span>τ — motor torque (N·m)</span><span>θ — angle from upright (rad)</span>
+    </div>
+  </div>
+
+  <!-- Studio panel: Plots -->
+  <div id="panel-plots" class="panel hidden">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="mono-cap-sm muted">[ P ] · LIVE TRACES</div>
+    <div class="plots-grid">
+      <div class="plot-cell">
+        <div class="mono-cap-sm muted">θ(t) · 6s window</div>
+        <canvas id="plot-theta" width="520" height="160"></canvas>
+      </div>
+      <div class="plot-cell">
+        <div class="mono-cap-sm muted">τ(t) · 6s window</div>
+        <canvas id="plot-tau" width="520" height="160"></canvas>
+      </div>
+    </div>
+    <div class="plots-grid">
+      <div class="plot-cell">
+        <div class="mono-cap-sm muted">OPEN-LOOP POLES · s-plane</div>
+        <canvas id="plot-poles" width="520" height="160"></canvas>
+      </div>
+      <div class="plot-cell">
+        <div class="mono-cap-sm muted">i(t) · motor current · 6s window</div>
+        <canvas id="plot-current" width="520" height="160"></canvas>
+      </div>
+    </div>
+    <div class="plots-grid">
+      <div class="plot-cell" style="grid-column: 1 / -1;">
+        <div class="mono-cap-sm muted">PHASE PORTRAIT · θ vs θ̇</div>
+        <canvas id="plot-phase" width="1060" height="180"></canvas>
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi">
+        <div class="mono-cap-sm muted">SETTLE · after PD catch</div>
+        <div class="kpi-v"><span id="k-settle">—</span><span class="kpi-u">s</span></div>
+      </div>
+      <div class="kpi"><div class="mono-cap-sm muted">|θ| MAX</div><div class="kpi-v"><span id="k-thmax">—</span><span class="kpi-u">rad</span></div></div>
+      <div class="kpi"><div class="mono-cap-sm muted">|τ| MAX</div><div class="kpi-v"><span id="k-tmax">—</span><span class="kpi-u">N·m</span></div></div>
+      <div class="kpi accent-kpi"><div class="mono-cap-sm muted">REGION</div><div class="kpi-v"><span id="k-region">idle</span></div></div>
+    </div>
+  </div>
+
+  <!-- Studio panel: Math -->
+  <div id="panel-math" class="panel hidden">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="mono-cap-sm muted">[ M ] · GOVERNING EQUATIONS · CT_PROJECT 2022</div>
+    <div class="math">
+      <div class="eq-row">
+        <div class="eq-label mono-cap-sm muted">PLANT · EQ 1</div>
+        <div class="eq serif-i">J θ̈ + b θ̇  =  K i + m g l sin(θ)</div>
+      </div>
+      <div class="eq-row">
+        <div class="eq-label mono-cap-sm muted">MOTOR · EQ 2</div>
+        <div class="eq serif-i">L di/dt + i R  =  V − K θ̇</div>
+      </div>
+      <div class="eq-row">
+        <div class="eq-label mono-cap-sm muted">DESTAB · EQ 14</div>
+        <div class="eq serif-i">V = V<sub>max</sub> · sgn(θ̇)  &nbsp;for T &lt; T<sub>t</sub>;&nbsp;&nbsp;V = 0  otherwise</div>
+      </div>
+      <div class="eq-row">
+        <div class="eq-label mono-cap-sm muted">PD POSITION · EQ 15</div>
+        <div class="eq serif-i">i<sub>d</sub> = (J/K) θ̈<sub>c</sub> + (b/K) θ̇ + (mgl sin θ)/K,&nbsp; θ̈<sub>c</sub> = −K<sub>p</sub> θ − K<sub>d</sub> θ̇</div>
+      </div>
+      <div class="eq-row">
+        <div class="eq-label mono-cap-sm muted">P CURRENT · EQ 17</div>
+        <div class="eq serif-i">i̇<sub>c</sub> = K<sub>p,i</sub> (i<sub>d</sub> − i),&nbsp;&nbsp;V = L i̇<sub>c</sub> + i R + K θ̇</div>
+      </div>
+      <div class="gains mono-cap-sm">
+        <span>J = 0.00467 kg·m²</span><span>b = 0.003 N·m·s</span>
+        <span>K = 0.06 V·s</span><span>R = 2.3634 Ω</span>
+        <span>L = 0.9794 H</span><span>mgl = 0.244 N·m</span>
+        <span>K<sub>p</sub> = 196</span><span>K<sub>d</sub> = 28</span>
+        <span>K<sub>p,i</sub> = 446</span>
+        <span class="accent">V<sub>max</sub> = 7 V</span>
+        <span class="accent">θ<sub>0</sub> = arcsin(KV<sub>max</sub>/mglR) = 47°</span>
+        <span>open-loop poles · +6.87, −2.45, −7.47</span>
+        <span>design settle · 4/(ζω<sub>n</sub>) = 0.29 s, ζ = 1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tweaks panel -->
+  <div id="tweaks" class="tweaks hidden">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="tweaks-header">
+      <span class="mono-cap-sm muted">[ T ] · TWEAKS</span>
+      <button class="tweaks-close" id="tweaks-close" aria-label="Close">×</button>
+    </div>
+    <div class="tweaks-section">
+      <div class="mono-cap-sm muted">CONTROL</div>
+      <label class="tweak-row"><span>Kp <span id="t-kp-val">196</span></span><input type="range" id="t-kp" min="20" max="400" step="2" value="196"></label>
+      <label class="tweak-row"><span>Kd <span id="t-kd-val">28</span></span><input type="range" id="t-kd" min="0" max="80" step="0.5" value="28"></label>
+      <label class="tweak-row"><span><span>V<sub>max</sub></span><span><span id="t-tmax-val">7.0</span> V</span></span><input type="range" id="t-tmax" min="2" max="12" step="0.1" value="7"></label>
+      <label class="tweak-row"><span><span>θ<sub>0</sub> (derived)</span><span><span id="t-ca-val">—</span> rad</span></span><input type="range" id="t-ca" min="0.10" max="1.20" step="0.01" value="0.82" disabled></label>
+    </div>
+    <div class="tweaks-section">
+      <div class="mono-cap-sm muted">SIM</div>
+      <label class="tweak-row"><span>Mode</span>
+        <select id="t-mode">
+          <option value="swing">SWING + PD</option>
+          <option value="off">FREE FALL</option>
+        </select>
+      </label>
+      <div class="tweak-buttons">
+        <button id="t-reset" class="pill sub"><span>[ RESET ]</span></button>
+        <button id="t-perturb" class="pill sub"><span>[ PERTURB ]</span></button>
+      </div>
+    </div>
+    <div class="tweaks-section">
+      <div class="mono-cap-sm muted">ACCENT</div>
+      <div class="swatches">
+        <button class="sw" data-c="#D4FF3A" style="background:#D4FF3A"></button>
+        <button class="sw" data-c="#FF6A3D" style="background:#FF6A3D"></button>
+        <button class="sw" data-c="#7AB7FF" style="background:#7AB7FF"></button>
+        <button class="sw" data-c="#F4F1E8" style="background:#F4F1E8"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tweaks open button -->
+  <button id="tweaks-open" class="tweaks-fab mono-cap-sm" aria-label="Open tweaks">[ T ] TWEAKS</button>
+
+  <!-- Share frame button -->
+  <button id="share-frame" class="share-fab mono-cap-sm" aria-label="Download current frame">[ ⤓ ] FRAME</button>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Brackets corner chrome -->
+  <div class="brackets fixed"><span class="br-tr"></span><span class="br-br"></span></div>
+
+  <script type="module" src="app.js?v=9"></script>
+</body>
+</html>
