@@ -16,7 +16,9 @@ per CT_Project paper (Patel/Kurle/Golait/Kanwat 2022).
 - `assets/scene_meta.json` — world-bounds metadata (unused at runtime;
   ORIGINAL Blender names with spaces — handy to predict sanitized GLB names).
 - `assets/og.jpg` — 1200×630 social share image (hero at balanced upright).
-  og:image/twitter:image are RELATIVE; swap to absolute URL on deploy.
+  og:image/twitter:image are ABSOLUTE to production:
+  `https://inverted-pendulum-two.vercel.app/` (Vercel project
+  `inverted-pendulum`, scope adarsh-golaits-projects).
 
 ## Materials (runtime override, Blender-faithful)
 
