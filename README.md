@@ -1,11 +1,11 @@
-# College Projects
+# Energy-Efficient Inverted Pendulum
 
-## Control Theory Project — Energy-Efficient Inverted Pendulum
+[![Inverted pendulum lab](Control%20Theory%20Project/Blender/Website%20Project/claude_design/inverted_pendulum/site/assets/og.jpg)](https://inverted-pendulum-two.vercel.app)
 
 **→ Live site: https://inverted-pendulum-two.vercel.app**
 
 Interactive 3D lab site driven by real Blender geometry and paper-accurate physics
-(Patel / Kurle / Golait / Kanwat, 2022 — see `Blender/Website Project/assets/CT_Project.pdf`).
+(Patel / Kurle / Golait / Kanwat, 2022 — see `Control Theory Project/Blender/Website Project/assets/CT_Project.pdf`).
 
 The pendulum you see in the browser is not a baked animation — it is the same RK4
 integrator and two-mode controller from `physics/pendulum_sim.py`, stepped live each
@@ -51,6 +51,6 @@ sources stays separable from what was inferred.
 
 ### Not in this repo (size limits)
 
-Per-part GLB exports (`Website Project/assets/*.glb`, ~100 MB each) and `.obj` mesh
+Per-part GLB exports (`Control Theory Project/Blender/Website Project/assets/*.glb`, ~100 MB each) and `.obj` mesh
 exports are gitignored — regenerate from `inverted_pendulum.blend` / the STEP sources.
 The site's own Draco-compressed `pendulum.glb` (10.6 MB) **is** included.
