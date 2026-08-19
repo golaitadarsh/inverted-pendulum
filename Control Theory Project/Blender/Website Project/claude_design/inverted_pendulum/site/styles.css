@@ -471,6 +471,18 @@ canvas#stage {
 }
 .hero-hint { letter-spacing: .2em; }
 
+/* Repo link — hero foot + top-left chrome */
+.src-link {
+  letter-spacing: .2em;
+  color: var(--accent-ink);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  opacity: .7;
+  transition: opacity .2s ease;
+}
+.src-link:hover, .src-link:focus-visible { opacity: 1; }
+
 /* Progressive fade-in */
 .hero-fade { opacity: 0; transform: translateY(8px); }
 .hero.go .hero-fade { animation: heroIn .65s cubic-bezier(.2,.7,.3,1) forwards; }

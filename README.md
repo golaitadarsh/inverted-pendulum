@@ -2,8 +2,14 @@
 
 ## Control Theory Project — Energy-Efficient Inverted Pendulum
 
+**→ Live site: https://inverted-pendulum-two.vercel.app**
+
 Interactive 3D lab site driven by real Blender geometry and paper-accurate physics
 (Patel / Kurle / Golait / Kanwat, 2022 — see `Blender/Website Project/assets/CT_Project.pdf`).
+
+The pendulum you see in the browser is not a baked animation — it is the same RK4
+integrator and two-mode controller from `physics/pendulum_sim.py`, stepped live each
+frame. Change `Kp`, `Kd`, or `Vmax` in the tweaks panel and the plant responds.
 
 ### Layout
 
