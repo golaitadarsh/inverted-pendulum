@@ -482,6 +482,27 @@ canvas#stage {
   transition: opacity .2s ease;
 }
 .src-link:hover, .src-link:focus-visible { opacity: 1; }
+.src-links { display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+/* Archive panel — source material + team */
+.docs { display: flex; flex-direction: column; margin-top: 14px; }
+.doc-row {
+  display: grid; gap: 3px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hair-2);
+  text-decoration: none; color: inherit;
+  transition: opacity .2s ease;
+}
+.doc-row:last-child { border-bottom: none; }
+.doc-row:hover, .doc-row:focus-visible { opacity: .62; }
+.doc-t { font-size: 15px; letter-spacing: -.01em; }
+.doc-row:hover .doc-t, .doc-row:focus-visible .doc-t { color: var(--accent-ink); }
+.doc-d { line-height: 1.65; max-width: 46ch; }
+.docs-head { margin-top: 22px; }
+.credits { display: flex; flex-direction: column; margin-top: 12px; }
+.credit-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 5px 0; }
+.credit-n { font-size: 14px; letter-spacing: -.01em; }
+.memoriam { margin-top: 14px; font-size: 15px; opacity: .6; }
 
 /* Progressive fade-in */
 .hero-fade { opacity: 0; transform: translateY(8px); }
@@ -570,10 +591,16 @@ body.entered .share-fab { opacity: 1; }
   .pills { bottom: 18px; gap: 6px; max-width: calc(100vw - 24px); }
   .pill { padding: 8px 11px; font-size: 9px; letter-spacing: .12em; gap: 6px; white-space: nowrap; }
   .pill .pn { display: none; }
-  .sub-pills { bottom: 62px; gap: 6px; }
+  .sub-pills {
+    /* left:50% + translateX(-50%) only leaves half the viewport to shrink-fit
+       into, which wraps four pills onto four rows. Span the width instead. */
+    bottom: 62px; gap: 6px;
+    left: 12px; right: 12px; transform: none;
+    flex-wrap: wrap; justify-content: center;
+  }
   .panel {
     top: auto;
-    bottom: 124px;
+    bottom: 160px;   /* clears the sub-pills, which now wrap to two rows */
     left: 12px;
     right: 12px;
     width: auto;

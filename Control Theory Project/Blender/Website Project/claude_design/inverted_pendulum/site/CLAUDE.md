@@ -15,6 +15,10 @@ per CT_Project paper (Patel/Kurle/Golait/Kanwat 2022).
     (legacy — overridden at load, see Materials below).
 - `assets/scene_meta.json` — world-bounds metadata (unused at runtime;
   ORIGINAL Blender names with spaces — handy to predict sanitized GLB names).
+- `assets/CT_Project.pdf` — the 2022 course paper, served from the site so
+  `[ ↗ PAPER ]` opens inline. Byte-identical copy of
+  `Blender/Website Project/assets/CT_Project.pdf`; git stores one blob for all
+  copies, so keep them identical or the repo grows.
 - `assets/og.jpg` — 1200×630 social share image (hero at balanced upright).
   og:image/twitter:image are ABSOLUTE to production:
   `https://inverted-pendulum-two.vercel.app/` (Vercel project
@@ -119,9 +123,9 @@ after moving the Blender camera: read `Camera.location` + forward, apply
   Blender names with spaces never match.
 - **RUN** — orbit + drag, Space perturbs, R resets, S toggles destabilizer.
   Default ω=0.001 at θ=π so destabilizer pumps energy to crest.
-- **STUDIO** — three sub-panels: Diagram (block diagram), Plots
+- **STUDIO** — four sub-panels: Diagram (block diagram), Plots
   (live θ/τ/i traces + open-loop pole-zero map + KPIs), Math (paper eqs +
-  gains + poles).
+  gains + poles), Archive (paper PDF, hardware video, team credits).
 
 Tweaks panel OPENS BY DEFAULT on desktop entry (>720px); mobile keeps it
 behind the `[ T ] TWEAKS` FAB (positioned below the KIT callout zone).
@@ -134,7 +138,7 @@ the default `#D4FF3A` swatch restores the authored palette EXACTLY via
 RHP pole marks, and the share-frame serif (all read `ACCENT` per frame).
 Choice persists in `localStorage['pendulum.accent']` and restores on boot.
 
-Keys: `1/2/3` modes, `D/P/M` sub-panels, `R` reset, `Space` perturb,
+Keys: `1/2/3` modes, `D/P/M/A` sub-panels, `R` reset, `Space` perturb,
 `T` / `?` / `/` toggle tweaks, `Esc` → KIT. All hotkeys ignore events from
 focused form controls (tweaks sliders/select).
 

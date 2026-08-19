@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700;900&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=7" />
+<link rel="stylesheet" href="styles.css?v=9" />
 <!-- Preconnect to Draco CDN -->
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
 <link rel="dns-prefetch" href="https://www.gstatic.com" />
@@ -101,7 +101,11 @@
         <span>[ ENTER LAB ]</span>
       </button>
       <span class="mono-cap-sm muted hero-hint">press 1 · 2 · 3 to switch modes</span>
-      <a class="mono-cap-sm src-link" href="https://github.com/golaitadarsh/inverted-pendulum" target="_blank" rel="noopener">[ ↗ SOURCE ]</a>
+      <span class="src-links mono-cap-sm">
+        <a class="src-link" href="assets/CT_Project.pdf" target="_blank" rel="noopener">[ ↗ PAPER ]</a>
+        <a class="src-link" href="https://drive.google.com/file/d/1JoBnupwAd_gvdzfio9srCIoMLRYLAzc1/view" target="_blank" rel="noopener">[ ↗ VIDEO ]</a>
+        <a class="src-link" href="https://github.com/golaitadarsh/inverted-pendulum" target="_blank" rel="noopener">[ ↗ SOURCE ]</a>
+      </span>
     </div>
   </div>
 
@@ -162,6 +166,7 @@
     <button class="pill sub active" data-sub="diagram"><span>[ D · DIAGRAM ]</span></button>
     <button class="pill sub" data-sub="plots"><span>[ P · PLOTS ]</span></button>
     <button class="pill sub" data-sub="math"><span>[ M · MATH ]</span></button>
+    <button class="pill sub" data-sub="docs"><span>[ A · ARCHIVE ]</span></button>
   </div>
 
   <!-- Studio panel: Diagram -->
@@ -260,6 +265,51 @@
     </div>
   </div>
 
+  <!-- Studio panel: Archive -->
+  <div id="panel-docs" class="panel hidden">
+    <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
+    <div class="mono-cap-sm muted">[ A ] · ARCHIVE · SOURCE MATERIAL</div>
+
+    <div class="docs">
+      <a class="doc-row" href="assets/CT_Project.pdf" target="_blank" rel="noopener">
+        <span class="doc-k mono-cap-sm muted">PAPER · PDF</span>
+        <span class="doc-t">Energy Efficient Control of an Inverted Pendulum</span>
+        <span class="doc-d mono-cap-sm muted">Full course paper — modelling, MATLAB system ID, open-loop analysis, controller design and tuning. May 2022.</span>
+      </a>
+      <a class="doc-row" href="https://drive.google.com/file/d/1JoBnupwAd_gvdzfio9srCIoMLRYLAzc1/view" target="_blank" rel="noopener">
+        <span class="doc-k mono-cap-sm muted">VIDEO · DRIVE</span>
+        <span class="doc-t">Hardware demo &amp; walkthrough</span>
+        <span class="doc-d mono-cap-sm muted">The physical rig swinging up and balancing, with the sensing and control loop explained on camera.</span>
+      </a>
+      <a class="doc-row" href="https://github.com/golaitadarsh/inverted-pendulum" target="_blank" rel="noopener">
+        <span class="doc-k mono-cap-sm muted">CODE · GITHUB</span>
+        <span class="doc-t">Simulation, CAD and this site</span>
+        <span class="doc-d mono-cap-sm muted">RK4 plant + controller in Python, CAD-derived mass properties, the Blender scene, and the source for this page.</span>
+      </a>
+    </div>
+
+    <div class="mono-cap-sm muted docs-head">TEAM</div>
+    <div class="credits">
+      <div class="credit-row">
+        <span class="credit-n">Videh Patel</span>
+        <span class="credit-r mono-cap-sm muted">modelling · PD control · experimentation</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-n">Anurag Kurle</span>
+        <span class="credit-r mono-cap-sm muted">modelling · PD control · experimentation</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-n">Pranav Kanwat</span>
+        <span class="credit-r mono-cap-sm muted">modelling · PD control · experimentation</span>
+      </div>
+      <div class="credit-row">
+        <span class="credit-n">Adarsh Golait</span>
+        <span class="credit-r mono-cap-sm muted">structural design · 3D model · laser cutting · assembly</span>
+      </div>
+      <div class="memoriam serif-i">In memory of Videh Patel.</div>
+    </div>
+  </div>
+
   <!-- Tweaks panel -->
   <div id="tweaks" class="tweaks hidden">
     <div class="brackets"><span class="br-tr"></span><span class="br-br"></span></div>
@@ -310,6 +360,6 @@
   <!-- Brackets corner chrome -->
   <div class="brackets fixed"><span class="br-tr"></span><span class="br-br"></span></div>
 
-  <script type="module" src="app.js?v=9"></script>
+  <script type="module" src="app.js?v=10"></script>
 </body>
 </html>

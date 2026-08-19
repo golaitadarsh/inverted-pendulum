@@ -11,6 +11,28 @@ The pendulum you see in the browser is not a baked animation — it is the same 
 integrator and two-mode controller from `physics/pendulum_sim.py`, stepped live each
 frame. Change `Kp`, `Kd`, or `Vmax` in the tweaks panel and the plant responds.
 
+### Source material
+
+| What | Where |
+|------|-------|
+| Course paper (PDF) | [`CT_Project.pdf`](Control%20Theory%20Project/Blender/Website%20Project/assets/CT_Project.pdf) — modelling, MATLAB system ID, open-loop analysis, controller design and tuning |
+| Hardware demo video | [Google Drive](https://drive.google.com/file/d/1JoBnupwAd_gvdzfio9srCIoMLRYLAzc1/view) — the physical rig swinging up and balancing, with the control loop explained on camera |
+
+Both are reachable from the site itself under **STUDIO → ARCHIVE**.
+
+### Team
+
+Course project, 2022.
+
+| | |
+|---|---|
+| Videh Patel | modelling · PD control · experimentation |
+| Anurag Kurle | modelling · PD control · experimentation |
+| Pranav Kanwat | modelling · PD control · experimentation |
+| Adarsh Golait | structural design · 3D model · laser cutting · assembly |
+
+*In memory of Videh Patel.*
+
 ### Layout
 
 | Path | What |

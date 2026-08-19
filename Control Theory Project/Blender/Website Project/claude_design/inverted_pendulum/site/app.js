@@ -586,6 +586,7 @@ const panels = {
   diagram: document.getElementById('panel-diagram'),
   plots:   document.getElementById('panel-plots'),
   math:    document.getElementById('panel-math'),
+  docs:    document.getElementById('panel-docs'),
 };
 const kitCallout = document.getElementById('kit-callout');
 const bNum = document.getElementById('b-num');
@@ -597,7 +598,7 @@ function setMode(m) {
   pillEls.forEach(p => p.classList.toggle('active', p.dataset.mode === m));
   if (m === 'kit')    { bNum.textContent = '[ 01 ]'; bLabel.textContent = 'KIT.'; bHint.textContent = '[ 1 KIT ]   [ 2 RUN ]   [ 3 STUDIO ]   [ T TWEAKS ]'; }
   if (m === 'run')    { bNum.textContent = '[ 02 ]'; bLabel.textContent = 'RUN.'; bHint.textContent = '[ DRAG ORBIT ]   [ SPACE PERTURB ]   [ R RESET ]   [ T TWEAKS ]'; }
-  if (m === 'studio') { bNum.textContent = '[ 03 ]'; bLabel.textContent = 'STUDIO.'; bHint.textContent = '[ D DIAGRAM ]   [ P PLOTS ]   [ M MATH ]   [ ESC ]'; }
+  if (m === 'studio') { bNum.textContent = '[ 03 ]'; bLabel.textContent = 'STUDIO.'; bHint.textContent = '[ D DIAGRAM ]   [ P PLOTS ]   [ M MATH ]   [ A ARCHIVE ]   [ ESC ]'; }
 
   controls.enabled = (m !== 'kit');
 
@@ -608,7 +609,7 @@ function setMode(m) {
 
   // Sub-pills + panels
   subPillsContainer.classList.toggle('hidden', m !== 'studio');
-  ['diagram','plots','math'].forEach(k => {
+  ['diagram','plots','math','docs'].forEach(k => {
     const visible = (m === 'studio' && uiState.sub === k);
     panels[k].classList.toggle('hidden', !visible);
     requestAnimationFrame(() => panels[k].classList.toggle('visible', visible));
@@ -628,7 +629,7 @@ function setMode(m) {
 function setSub(s) {
   uiState.sub = s;
   subPillEls.forEach(p => p.classList.toggle('active', p.dataset.sub === s));
-  ['diagram','plots','math'].forEach(k => {
+  ['diagram','plots','math','docs'].forEach(k => {
     const visible = (uiState.mode === 'studio' && uiState.sub === k);
     panels[k].classList.toggle('hidden', !visible);
     requestAnimationFrame(() => panels[k].classList.toggle('visible', visible));
@@ -653,6 +654,7 @@ window.addEventListener('keydown', (e) => {
   else if (e.key === 'd' || e.key === 'D') { if (uiState.mode==='studio') setSub('diagram'); }
   else if (e.key === 'p' || e.key === 'P') { if (uiState.mode==='studio') setSub('plots'); }
   else if (e.key === 'm' || e.key === 'M') { if (uiState.mode==='studio') setSub('math'); }
+  else if (e.key === 'a' || e.key === 'A') { if (uiState.mode==='studio') setSub('docs'); }
   else if (e.key === 'r' || e.key === 'R') resetSim();
   else if (e.key === ' ') { e.preventDefault(); sim.state.omega += (Math.random() > 0.5 ? 1 : -1) * 1.3; pulseBob(); }
   else if (e.key === 's' || e.key === 'S') { sim.mode = (sim.mode === 'swing') ? 'off' : 'swing'; }
