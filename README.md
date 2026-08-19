@@ -29,6 +29,20 @@ Two-mode controller: energy-pump swing-up (`V = Vmax · sign(θ̇)`) until the e
 target, then cascaded PD-position / P-current stabiliser (Kp = 196, Kd = 28, Kp_i = 446).
 Inertia from CAD, not system ID: `J = 0.00467 kg·m²`, `mgl = 0.244 N·m`.
 
+### Knowledge graph
+
+The whole corpus — code, CAD, the paper PDF, lab photos, and Whisper transcripts of the
+hardware videos — is indexed as a single navigable knowledge graph (416 nodes, 618 edges,
+community-clustered).
+
+| File | What |
+|------|------|
+| `Control Theory Project/graphify-out/graph.html` | Interactive graph — open in any browser, no server needed |
+| `Control Theory Project/graphify-out/GRAPH_REPORT.md` | Audit report: communities, hub nodes, cross-document connections |
+
+Every edge is tagged `EXTRACTED`, `INFERRED`, or `AMBIGUOUS`, so what was found in the
+sources stays separable from what was inferred.
+
 ### Not in this repo (size limits)
 
 Per-part GLB exports (`Website Project/assets/*.glb`, ~100 MB each) and `.obj` mesh

@@ -34,3 +34,12 @@ node_modules/
 
 # Downloaded addon installers
 *blenderkit*.zip
+
+# graphify knowledge graph — publish the shareable outputs, ignore generated vault/cache
+**/graphify-out/**
+!**/graphify-out/
+!**/graphify-out/graph.html
+!**/graphify-out/GRAPH_REPORT.md
+
+# Obsidian vault config (local editor state)
+.obsidian/

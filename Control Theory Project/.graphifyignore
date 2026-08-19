@@ -1,0 +1,5 @@
+# graphify's own outputs - never re-ingest (self-feedback loop)
+graphify-out/obsidian/*
+graphify-out/GRAPH_REPORT.md
+graphify-out/graph.html
+# transcripts/ and memory/ are intentionally kept as corpus input
