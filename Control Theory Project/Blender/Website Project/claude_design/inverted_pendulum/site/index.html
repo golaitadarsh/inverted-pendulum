@@ -46,6 +46,8 @@
 <link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js" />
 <!-- No GLB preload: app.js fetches with a per-minute ?v= cache-bust, so a
      static preload URL can never match and the 10.6 MB GLB downloads twice. -->
+<!-- Vercel Web Analytics (static-site script; @vercel/analytics needs a bundler) -->
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body class="mat-d">
 
